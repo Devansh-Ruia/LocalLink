@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  WORKER
+  CUSTOMER
+}
+
+enum ServiceCategory {
+  BABYSITTING
+  TUTORING
+  HANDYMAN
+  CLEANING
+  LANDSCAPING
+  PET_CARE
+  OTHER
+}
+
+enum VerificationBadge {
+  NONE
+  ID_VERIFIED
+  SKILL_CHECKED
+  FULLY_CERTIFIED
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String
+  role              UserRole
+  name              String
+  profileImageUrl   String?
+  phone             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  workerProfile     WorkerProfile?
+  customerBookings  BookingRequest[] @relation("CustomerBookings")
+  workerBookings    BookingRequest[] @relation("WorkerBookings")
+  reviews           Review[]
+  messages          Message[]
+
+  @@map("users")
+}
+
+model WorkerProfile {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  bio                String
+  serviceCategory    ServiceCategory
+  hourlyRate         Float?
+  locationLat        Float
+  locationLng        Float
+  neighborhood       String
+  radiusMiles        Float              @default(5)
+  isVerified         Boolean            @default(false)
+  verificationBadge  VerificationBadge  @default(NONE)
+  availabilityNotes  String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workerBookings     BookingRequest[]    @relation("WorkerBookings")
+  reviews            Review[]
+
+  @@map("worker_profiles")
+}
+
+model BookingRequest {
+  id              String        @id @default(uuid())
+  customerId      String
+  workerId        String
+  serviceCategory ServiceCategory
+  message         String
+  proposedDate    DateTime
+  proposedTime    String
+  status          BookingStatus @default(PENDING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  customer        User          @relation("CustomerBookings", fields: [customerId], references: [id])
+  worker          WorkerProfile @relation("WorkerBookings", fields: [workerId], references: [id])
+  reviews         Review[]
+  messages        Message[]
+
+  @@map("booking_requests")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  reviewerId String
+  workerId   String
+  bookingId  String   @unique
+  rating     Int
+  comment    String
+  createdAt  DateTime @default(now())
+
+  reviewer   User           @relation(fields: [reviewerId], references: [id])
+  worker     WorkerProfile  @relation(fields: [workerId], references: [id])
+  booking    BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  bookingId String
+  senderId  String
+  text      String
+  createdAt DateTime @default(now())
+
+  booking   BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  sender    User           @relation(fields: [senderId], references: [id])
+
+  @@map("messages")
+}
