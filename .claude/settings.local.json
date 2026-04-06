@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/super/Downloads/Desktop/LocalLink/webapp/src -type f \\\\\\(-name *.jsx -o -name *.js -o -name *.css -o -name *.json \\\\\\))",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

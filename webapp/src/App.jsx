@@ -1,24 +1,25 @@
 import { useState, useRef, useEffect } from "react";
+import ActivityHeatmap from "./ActivityHeatmap";
 
 const C = {
-  bg: "#0A0F1A", bgCard: "#111827", bgHover: "#1A2235", bgInput: "#1A2235",
-  accent: "#FF7438", accentSoft: "rgba(255,116,56,0.12)", accentText: "#FF8F5E",
-  cyan: "#90E0EF", cyanSoft: "rgba(144,224,239,0.1)", cyanText: "#90E0EF",
-  text: "#E8ECF1", textSec: "#8793A6", textMuted: "#5A6478",
-  border: "#1E293B", borderLight: "#2A3550",
-  green: "#34D399", greenSoft: "rgba(52,211,153,0.12)",
-  red: "#F87171", redSoft: "rgba(248,113,113,0.12)",
-  yellow: "#FBBF24", yellowSoft: "rgba(251,191,36,0.12)",
-  blue: "#60A5FA", blueSoft: "rgba(96,165,250,0.12)",
+  bg: "#FFFFFF", bgCard: "#F5F7FA", bgHover: "#EDF0F5", bgInput: "#FFFFFF",
+  accent: "#046588", accentSoft: "rgba(4,101,136,0.1)", accentText: "#046588",
+  cyan: "#CFE87B", cyanSoft: "rgba(207,232,123,0.15)", cyanText: "#7A9A00",
+  text: "#021C28", textSec: "#3A5A6A", textMuted: "#6A8899",
+  border: "#DDE4EA", borderLight: "#C5D0D8",
+  green: "#7A9A00", greenSoft: "rgba(207,232,123,0.2)",
+  red: "#D44", redSoft: "rgba(221,68,68,0.1)",
+  yellow: "#7A9A00", yellowSoft: "rgba(207,232,123,0.2)",
+  blue: "#046588", blueSoft: "rgba(4,101,136,0.1)",
 };
 
 const CATS = ["All","Babysitting","Tutoring","Handyman","Cleaning","Landscaping","Pet Care","Other"];
 
 const BADGES = {
   NONE: { l: "", c: C.textMuted, ic: "" },
-  ID_VERIFIED: { l: "ID Verified", c: C.cyan, ic: "◈" },
-  SKILL_CHECKED: { l: "Skill Checked", c: C.green, ic: "◆" },
-  FULLY_CERTIFIED: { l: "Certified", c: C.accent, ic: "★" },
+  ID_VERIFIED: { l: "ID Verified", c: "#046588", ic: "◈" },
+  SKILL_CHECKED: { l: "Skill Checked", c: "#7A9A00", ic: "◆" },
+  FULLY_CERTIFIED: { l: "Certified", c: "#046588", ic: "★" },
 };
 
 const W = [
@@ -59,7 +60,7 @@ const SR = [
 const inputBase = {
   width:"100%",padding:"14px 16px",borderRadius:8,border:`1.5px solid ${C.borderLight}`,background:C.bgInput,
   color:C.text,fontSize:15,outline:"none",fontFamily:"inherit",boxSizing:"border-box",transition:"border-color 0.2s, box-shadow 0.2s",
-  WebkitAppearance:"none",colorScheme:"dark"
+  WebkitAppearance:"none",colorScheme:"light"
 };
 const focusStyle = { borderColor: C.accent, boxShadow: `0 0 0 3px ${C.accent}25` };
 
@@ -422,6 +423,9 @@ export default function App() {
                   );
                 })
               }
+            </div>
+            <div style={{marginTop:24}}>
+              <ActivityHeatmap/>
             </div>
           </div>
         )}
