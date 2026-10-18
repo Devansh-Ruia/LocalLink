@@ -1,16 +1,17 @@
+import ShowcasePage from "./ShowcasePage";
 import { useState, useRef, useEffect } from "react";
 import ActivityHeatmap from "./ActivityHeatmap";
 
 const C = {
-  bg: "#FFFFFF", bgCard: "#F5F7FA", bgHover: "#EDF0F5", bgInput: "#FFFFFF",
-  accent: "#046588", accentSoft: "rgba(4,101,136,0.1)", accentText: "#046588",
-  cyan: "#CFE87B", cyanSoft: "rgba(207,232,123,0.15)", cyanText: "#7A9A00",
-  text: "#021C28", textSec: "#3A5A6A", textMuted: "#6A8899",
-  border: "#DDE4EA", borderLight: "#C5D0D8",
-  green: "#7A9A00", greenSoft: "rgba(207,232,123,0.2)",
-  red: "#D44", redSoft: "rgba(221,68,68,0.1)",
-  yellow: "#7A9A00", yellowSoft: "rgba(207,232,123,0.2)",
-  blue: "#046588", blueSoft: "rgba(4,101,136,0.1)",
+  bg: "#021C28", bgCard: "#0A2E3E", bgHover: "#0F3A4D", bgInput: "#071F2D",
+  accent: "#046588", accentSoft: "rgba(4,101,136,0.25)", accentText: "#2A9ABF",
+  cyan: "#CFE87B", cyanSoft: "rgba(207,232,123,0.15)", cyanText: "#CFE87B",
+  text: "#FFFFFF", textSec: "#A0B8C8", textMuted: "#6A8899",
+  border: "rgba(106,136,153,0.2)", borderLight: "rgba(106,136,153,0.35)",
+  green: "#CFE87B", greenSoft: "rgba(207,232,123,0.15)",
+  red: "#FF6B6B", redSoft: "rgba(255,107,107,0.15)",
+  yellow: "#CFE87B", yellowSoft: "rgba(207,232,123,0.15)",
+  blue: "#2A9ABF", blueSoft: "rgba(42,154,191,0.15)",
 };
 
 const CATS = ["All","Babysitting","Tutoring","Handyman","Cleaning","Landscaping","Pet Care","Other"];
@@ -131,7 +132,7 @@ function NavBar({tab,setTab,role,setSw,setAb}) {
   );
 }
 
-export default function App() {
+function App({ onBackToShowcase }) {
   const [scr,setScr]=useState("welcome");
   const [role,setRole]=useState(null);
   const [user,setUser]=useState(null);
@@ -166,47 +167,52 @@ export default function App() {
     return true;
   }).sort((a,b)=>a.d-b.d);
 
-  const font = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
+  const font = "'Sora','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
 
   // Toast overlay
   const toastEl = toast ? <div style={{position:"fixed",bottom:64,left:"50%",transform:"translateX(-50%)",background:C.bgCard,border:`1px solid ${C.borderLight}`,color:C.text,padding:"10px 22px",borderRadius:8,fontSize:13,fontWeight:600,zIndex:100,letterSpacing:"0.02em"}}>{toast}</div> : null;
 
   // WELCOME
   if(scr==="welcome") return(
-    <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",justifyContent:"center",padding:"40px 32px",fontFamily:font}}>
-      <div style={{marginBottom:48}}>
-        <div style={{fontSize:11,fontWeight:700,letterSpacing:"0.2em",color:C.accent,textTransform:"uppercase",marginBottom:16}}>LocalLink</div>
-        <h1 style={{color:C.text,fontSize:36,fontWeight:300,margin:0,lineHeight:1.2,letterSpacing:"-0.01em"}}>Find trusted help<br/><span style={{fontWeight:700}}>in your neighborhood</span></h1>
-        <p style={{color:C.textSec,fontSize:14,marginTop:14,lineHeight:1.6,maxWidth:300}}>Connecting communities with verified local service providers. Built on trust, not algorithms.</p>
-      </div>
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        <Btn onClick={()=>{setRole("customer");setScr("register");}} full>Find Services</Btn>
-        <Btn variant="outline" onClick={()=>{setRole("worker");setScr("register");}} full>Offer Services</Btn>
-      </div>
-      <div style={{marginTop:48,display:"flex",gap:24}}>
-        {[{n:"200+",l:"Local Pros"},{n:"4.8",l:"Avg Rating"},{n:"12",l:"Neighborhoods"}].map(s=>(
-          <div key={s.l}><div style={{fontSize:22,fontWeight:700,color:C.text}}>{s.n}</div><div style={{fontSize:11,color:C.textMuted,letterSpacing:"0.05em",textTransform:"uppercase",marginTop:2}}>{s.l}</div></div>
-        ))}
+    <div style={{minHeight:"100vh",background:"#021C28",display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px",fontFamily:"'Sora','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"}}>
+      <div style={{maxWidth:440,width:"100%",textAlign:"center"}}>
+        <div style={{fontSize:12,fontWeight:600,letterSpacing:"4px",color:"#CFE87B",textTransform:"uppercase",marginBottom:24}}>LocalLink</div>
+        <h1 style={{color:"#FFFFFF",fontSize:40,fontWeight:300,margin:0,lineHeight:1.15,letterSpacing:"-0.02em"}}>Find trusted help<br/><span style={{fontWeight:700,color:"#CFE87B"}}>in your neighborhood</span></h1>
+        <p style={{color:"#6A8899",fontSize:15,marginTop:20,lineHeight:1.7,maxWidth:360,marginLeft:"auto",marginRight:"auto"}}>Connecting communities with verified local service providers. Built on trust, not algorithms.</p>
+        <div style={{display:"flex",flexDirection:"column",gap:12,marginTop:36,maxWidth:320,marginLeft:"auto",marginRight:"auto"}}>
+          <button onClick={()=>{setRole("customer");setScr("register");}} style={{width:"100%",padding:"14px 24px",background:"#046588",color:"#FFFFFF",border:"2px solid #046588",borderRadius:8,fontSize:15,fontWeight:600,fontFamily:"'Sora',sans-serif",cursor:"pointer",letterSpacing:"0.01em"}}>Find Services</button>
+          <button onClick={()=>{setRole("worker");setScr("register");}} style={{width:"100%",padding:"14px 24px",background:"transparent",color:"#FFFFFF",border:"2px solid rgba(255,255,255,0.5)",borderRadius:8,fontSize:15,fontWeight:600,fontFamily:"'Sora',sans-serif",cursor:"pointer",letterSpacing:"0.01em"}}>Offer Services</button>
+        </div>
+        <div style={{marginTop:48,display:"flex",gap:32,justifyContent:"center"}}>
+          {[{n:"200+",l:"Local Pros"},{n:"4.8",l:"Avg Rating"},{n:"12",l:"Neighborhoods"}].map(s=>(
+            <div key={s.l}><div style={{fontSize:24,fontWeight:800,color:"#FFFFFF"}}>{s.n}</div><div style={{fontSize:10,color:"#6A8899",letterSpacing:"0.08em",textTransform:"uppercase",marginTop:4}}>{s.l}</div></div>
+          ))}
+        </div>
+        {onBackToShowcase && <div style={{marginTop:36,textAlign:"center"}}><button onClick={onBackToShowcase} style={{background:"none",border:"none",color:"#6A8899",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"'Sora',sans-serif",letterSpacing:"0.01em",padding:"8px 16px",transition:"color 0.2s"}}>Back to Home</button></div>}
       </div>
     </div>
   );
 
   // REGISTER
   if(scr==="register") return(
-    <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,padding:"40px 32px",fontFamily:font}}>
-      <Btn variant="ghost" onClick={()=>setScr("welcome")}>← Back</Btn>
-      <div style={{marginTop:24,marginBottom:32}}>
-        <div style={{fontSize:11,fontWeight:700,letterSpacing:"0.2em",color:C.accent,textTransform:"uppercase",marginBottom:8}}>{role==="customer"?"Customer":"Service Provider"}</div>
-        <h2 style={{color:C.text,fontSize:28,fontWeight:300,margin:0}}>Create your <span style={{fontWeight:700}}>account</span></h2>
+    <div style={{minHeight:"100vh",background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px",fontFamily:"'Sora','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"}}>
+      <div style={{maxWidth:440,width:"100%"}}>
+        <button onClick={()=>setScr("welcome")} style={{background:"none",border:"none",color:"#6A8899",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"'Sora',sans-serif",padding:"8px 0",marginBottom:16}}>← Back</button>
+        <div style={{textAlign:"center",marginBottom:36}}>
+          <div style={{fontSize:12,fontWeight:600,letterSpacing:"4px",color:"#CFE87B",textTransform:"uppercase",marginBottom:16}}>{role==="customer"?"Customer":"Service Provider"}</div>
+          <h2 style={{color:"#FFFFFF",fontSize:32,fontWeight:300,margin:0}}>Create your <span style={{fontWeight:700}}>account</span></h2>
+        </div>
+        <Label>Full Name</Label>
+        <Input autoFocus value={rn} onChange={e=>setRn(e.target.value)} placeholder="Your name" />
+        <Label>Email</Label>
+        <Input value={re} onChange={e=>setRe(e.target.value)} placeholder="you@email.com" />
+        <Label>Password</Label>
+        <Input type="password" placeholder="••••••••" />
+        <div style={{marginTop:28}}>
+          <button onClick={()=>{if(rn&&re){setUser({name:rn,email:re});setScr("app");setTab(role==="worker"&&!wc?"profile":"home");}}} style={{width:"100%",padding:"14px 24px",background:"#046588",color:"#FFFFFF",border:"2px solid #046588",borderRadius:8,fontSize:15,fontWeight:600,fontFamily:"'Sora',sans-serif",cursor:"pointer",letterSpacing:"0.01em"}}>Continue</button>
+        </div>
+        {toastEl}
       </div>
-      <Label>Full Name</Label>
-      <Input autoFocus value={rn} onChange={e=>setRn(e.target.value)} placeholder="Your name" />
-      <Label>Email</Label>
-      <Input value={re} onChange={e=>setRe(e.target.value)} placeholder="you@email.com" />
-      <Label>Password</Label>
-      <Input type="password" placeholder="••••••••" />
-      <div style={{marginTop:24}}><Btn onClick={()=>{if(rn&&re){setUser({name:rn,email:re});setScr("app");setTab(role==="worker"&&!wc?"profile":"home");}}} full>Continue</Btn></div>
-      {toastEl}
     </div>
   );
 
@@ -216,8 +222,8 @@ export default function App() {
   if(sw){
     const w=sw;const wr=wRevs(w.id);const wa=wAvg(w.id);
     return(
-      <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
-        <div style={{flex:1,overflowY:"auto",padding:"0 20px 20px"}}>
+      <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
+        <div style={{flex:1,overflowY:"auto",padding:"0 32px 32px"}}>
           <Btn variant="ghost" onClick={()=>setSw(null)}>← Back</Btn>
           <div style={{marginTop:16,marginBottom:24}}>
             <div style={{width:64,height:64,borderRadius:8,background:`linear-gradient(135deg,${C.accent}30,${C.cyan}20)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,fontWeight:700,color:C.accent,marginBottom:16,letterSpacing:"0.05em"}}>{w.av}</div>
@@ -267,8 +273,8 @@ export default function App() {
   if(scr==="booking"){
     const w=sw||W[0];
     return(
-      <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
-        <div style={{flex:1,overflowY:"auto",padding:"0 20px 20px"}}>
+      <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
+        <div style={{flex:1,overflowY:"auto",padding:"0 32px 32px"}}>
           <Btn variant="ghost" onClick={()=>setScr("app")}>← Back</Btn>
           <div style={{marginTop:24,marginBottom:32}}>
             <div style={{fontSize:11,fontWeight:700,letterSpacing:"0.2em",color:C.accent,textTransform:"uppercase",marginBottom:8}}>New Booking</div>
@@ -301,8 +307,8 @@ export default function App() {
     const stC={PENDING:{bg:C.yellowSoft,c:C.yellow},ACCEPTED:{bg:C.greenSoft,c:C.green},COMPLETED:{bg:C.blueSoft,c:C.blue},DECLINED:{bg:C.redSoft,c:C.red},CANCELLED:{bg:C.bgInput,c:C.textMuted}};
     const sc=stC[b.st]||stC.PENDING;
     return(
-      <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
-        <div style={{flex:1,overflowY:"auto",padding:"0 20px 20px"}}>
+      <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
+        <div style={{flex:1,overflowY:"auto",padding:"0 32px 32px"}}>
           <Btn variant="ghost" onClick={()=>{setAb(null);setMi("");}}>← Back</Btn>
           <div style={{background:C.bgCard,borderRadius:8,padding:18,border:`1px solid ${C.border}`,marginTop:12,marginBottom:16}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
@@ -351,8 +357,8 @@ export default function App() {
   if(scr==="review"&&ab){
     const b=ab;
     return(
-      <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
-        <div style={{flex:1,overflowY:"auto",padding:"0 20px 20px"}}>
+      <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
+        <div style={{flex:1,overflowY:"auto",padding:"0 32px 32px"}}>
           <Btn variant="ghost" onClick={()=>setScr("app")}>← Back</Btn>
           <div style={{marginTop:24,marginBottom:32}}>
             <div style={{fontSize:11,fontWeight:700,letterSpacing:"0.2em",color:C.accent,textTransform:"uppercase",marginBottom:8}}>Review</div>
@@ -379,8 +385,8 @@ export default function App() {
 
   // MAIN TABS
   return(
-    <div style={{maxWidth:420,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
-      <div style={{flex:1,overflowY:"auto",padding:"0 20px 20px"}}>
+    <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",fontFamily:font,color:C.text}}>
+      <div style={{flex:1,overflowY:"auto",padding:"0 32px 32px"}}>
 
         {tab==="home"&&role==="customer"&&(
           <div style={{paddingTop:24}}>
@@ -536,3 +542,13 @@ export default function App() {
     </div>
   );
 }
+
+function Root() {
+  const [view, setView] = useState("showcase");
+  if (view === "showcase") {
+    return <ShowcasePage onEnterApp={() => setView("app")} />;
+  }
+  return <App onBackToShowcase={() => setView("showcase")} />;
+}
+
+export default Root;

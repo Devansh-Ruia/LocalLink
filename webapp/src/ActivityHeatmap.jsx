@@ -58,7 +58,7 @@ function blendColors(hex1, hex2, t) {
 
 /** Map an intensity 0–100 to a color on the brand gradient */
 function getColor(intensity) {
-  if (intensity === 0) return "#F5F7FA";
+  if (intensity === 0) return "#0A2E3E";
   if (intensity < 26) return `rgba(4, 101, 136, ${0.15 + intensity * 0.008})`;
   if (intensity < 61) return "#046588";
   if (intensity < 86) {
@@ -196,7 +196,7 @@ export default function ActivityHeatmap() {
               fontFamily: "inherit",
               transition: "all 0.15s",
               letterSpacing: "0.02em",
-              background: mode === t.id ? "#046588" : "#F5F7FA",
+              background: mode === t.id ? "#046588" : "#0A2E3E",
               color: mode === t.id ? "#fff" : "#6A8899",
             }}
           >
@@ -208,8 +208,8 @@ export default function ActivityHeatmap() {
       {/* ── card ───────────────────────────────── */}
       <div
         style={{
-          background: "#F5F7FA",
-          border: "1px solid #E2E8F0",
+          background: "#0A2E3E",
+          border: "1px solid rgba(106,136,153,0.2)",
           borderRadius: 12,
           padding: isMobile ? "14px 10px 18px" : "20px 22px 24px",
         }}
@@ -221,7 +221,7 @@ export default function ActivityHeatmap() {
               margin: 0,
               fontSize: 16,
               fontWeight: 700,
-              color: "#021C28",
+              color: "#FFFFFF",
               letterSpacing: "-0.01em",
             }}
           >
@@ -329,7 +329,7 @@ export default function ActivityHeatmap() {
               height: 8,
               borderRadius: 4,
               background:
-                "linear-gradient(to right, #F5F7FA 0%, #046588 50%, #CFE87B 100%)",
+                "linear-gradient(to right, #0A2E3E 0%, #046588 50%, #CFE87B 100%)",
             }}
           />
           <div
